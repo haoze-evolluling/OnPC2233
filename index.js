@@ -7,7 +7,7 @@ const path = require('path');
 // 读取屏蔽列表
 function loadBlockList() {
   try {
-    const blockListPath = path.join(__dirname, '屏蔽列表.md');
+    const blockListPath = path.join(__dirname, 'defence.txt');
     const content = fs.readFileSync(blockListPath, 'utf8');
     
     // 提取所有URL和域名（忽略注释和空行）
@@ -58,6 +58,25 @@ function createWindow() {
     
     console.log('网络请求过滤器已启用');
   }
+
+  // 拦截new-window事件，在当前窗口打开链接
+  win.webContents.setWindowOpenHandler((details) => {
+    // 拦截新窗口打开请求
+    console.log('拦截到新窗口请求:', details.url);
+    
+    // 如果是b站内部链接，则在当前窗口打开
+    if (details.url.includes('bilibili.com')) {
+      win.loadURL(details.url);
+      return { action: 'deny' }; // 阻止新窗口打开
+    }
+    
+    return { action: 'allow' }; // 允许其他链接在新窗口打开
+  });
+  
+  // 拦截导航事件，确保所有导航都在当前窗口进行
+  win.webContents.on('will-navigate', (event, url) => {
+    console.log('拦截到页面导航:', url);
+  });
 
   win.loadURL('http://www.bilibili.com');
   
