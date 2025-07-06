@@ -1,0 +1,22 @@
+{
+  "name": "bilibili",
+  "version": "1.0.102",
+  "description": "a video player",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/haoze-evolluling/BILIBILI.git"
+  },
+  "author": "haoze",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/haoze-evolluling/BILIBILI/issues"
+  },
+  "homepage": "https://github.com/haoze-evolluling/BILIBILI#readme",
+  "devDependencies": {
+    "electron": "^37.2.0"
+  }
+}
