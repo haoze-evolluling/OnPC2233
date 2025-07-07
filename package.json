@@ -4,7 +4,9 @@
   "description": "a video player",
   "main": "index.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
   },
   "repository": {
     "type": "git",
@@ -17,6 +19,22 @@
   },
   "homepage": "https://github.com/haoze-evolluling/BILIBILI#readme",
   "devDependencies": {
-    "electron": "^37.2.0"
+    "electron": "^37.2.0",
+    "electron-builder": "^24.6.4"
+  },
+  "build": {
+    "appId": "com.haoze.bilibili",
+    "productName": "BILIBILI",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "**/*",
+      "!dist/**/*"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "icon.ico"
+    }
   }
 }
