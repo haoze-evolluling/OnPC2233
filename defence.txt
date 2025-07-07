@@ -1,8 +1,6 @@
 cm.bilibili.com
 data.bilibili.com
 bilibiligame.cn
-bilibiligame.co
 bilibiligame.net
-biligame.co
 biligame.com
 biligame.net
