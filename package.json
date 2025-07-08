@@ -1,6 +1,6 @@
 {
   "name": "bilibili",
-  "version": "1.0.102",
+  "version": "1.0.106",
   "description": "a video player",
   "main": "index.js",
   "scripts": {
