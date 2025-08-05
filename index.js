@@ -36,7 +36,7 @@ function loadBlockList() {
 
 function createWindow() {
   const win = new BrowserWindow({
-    width: 1200,
+    width: 1300,
     height: 800,
     autoHideMenuBar: true,
     webPreferences: {
