@@ -4,7 +4,7 @@
   "description": "a video player",
   "main": "index.js",
   "scripts": {
-    "start": "electron .",
+    "start": "chcp 65001 && electron .",
     "pack": "electron-builder --dir",
     "dist": "electron-builder"
   },
@@ -55,4 +55,4 @@
       "shortcutName": "${productName}"
     }
   }
-} 
+}

@@ -4,6 +4,16 @@ const { app, BrowserWindow, session } = require('electron');
 const fs = require('fs');
 const path = require('path');
 
+// 设置控制台编码为UTF-8以支持中文输出
+if (process.platform === 'win32') {
+  try {
+    const { execSync } = require('child_process');
+    execSync('chcp 65001');
+  } catch (error) {
+    console.warn('无法设置控制台编码为UTF-8:', error.message);
+  }
+}
+
 // 读取屏蔽列表
 function loadBlockList() {
   try {
