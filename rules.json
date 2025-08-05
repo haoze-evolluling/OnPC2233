@@ -1,0 +1,253 @@
+{
+  "version": "1.0.2",
+  "metadata": 
+  {
+    "description": "B站广告拦截规则",
+    "source": "custom"
+  },
+  "rules": {
+    "cssSelectors": [
+      {
+        "selector": ".adcard-content",
+        "type": "hide",
+        "domains": ["bilibili.com"],
+        "description": "隐藏广告卡片内容"
+      },
+      {
+        "selector": ".ad-report",
+        "type": "hide",
+        "domains": ["bilibili.com"],
+        "description": "隐藏广告举报按钮"
+      },
+      {
+        "selector": ".activity-slider[style=\"width: 1220px;\"]",
+        "type": "hide",
+        "domains": ["bilibili.com"],
+        "description": "隐藏活动滑块广告"
+      },
+      {
+        "selector": ".ad-e1",
+        "type": "hide",
+        "domains": ["bilibili.com"],
+        "description": "隐藏E1类型广告"
+      },
+      {
+        "selector": ".ad-f",
+        "type": "hide",
+        "domains": ["bilibili.com"],
+        "description": "隐藏F类型广告"
+      },
+      {
+        "selector": ".banner-card",
+        "type": "hide",
+        "domains": ["bilibili.com"],
+        "description": "隐藏横幅卡片广告"
+      },
+      {
+        "selector": ".bili-dyn-ads",
+        "type": "hide",
+        "domains": ["bilibili.com"],
+        "description": "隐藏动态广告"
+      },
+      {
+        "selector": ".bili-video-card__wrap > a[href^=\"http\"]:not([href*=\".bilibili.com/\"])",
+        "type": "hide",
+        "domains": ["bilibili.com"],
+        "description": "隐藏外链视频卡片"
+      },
+      {
+        "selector": ".container-wrapper[style=\"height:180px;min-width:1280px\"]",
+        "type": "hide",
+        "domains": ["live.bilibili.com"],
+        "description": "隐藏直播页容器180px"
+      },
+      {
+        "selector": ".container-wrapper[style=\"height:446px;min-width:1280px\"]",
+        "type": "hide",
+        "domains": ["live.bilibili.com"],
+        "description": "隐藏直播页容器446px"
+      },
+      {
+        "selector": ".eva-banner",
+        "type": "hide",
+        "domains": ["bilibili.com"],
+        "description": "隐藏EVA横幅广告"
+      },
+      {
+        "selector": ".gg-floor-module",
+        "type": "hide",
+        "domains": ["bilibili.com"],
+        "description": "隐藏广告楼层模块"
+      },
+      {
+        "selector": ".index-promote",
+        "type": "hide",
+        "domains": ["bilibili.com"],
+        "description": "隐藏首页推广"
+      },
+      {
+        "selector": ".online + .adpos",
+        "type": "hide",
+        "domains": ["bilibili.com"],
+        "description": "隐藏在线人数后的广告位"
+      },
+      {
+        "selector": ".operate-card[data-target-url*=\".miaozhen.\"]",
+        "type": "hide",
+        "domains": ["bilibili.com"],
+        "description": "隐藏妙针广告卡片"
+      },
+      {
+        "selector": ".operate-card[data-target-url*=\"doubleclick.\"]",
+        "type": "hide",
+        "domains": ["bilibili.com"],
+        "description": "隐藏DoubleClick广告卡片"
+      },
+      {
+        "selector": ".title > span > a[href^=\"http\"]:not([href*=\".bilibili.\"])",
+        "type": "hide",
+        "domains": ["bilibili.com"],
+        "description": "隐藏标题外链"
+      },
+      {
+        "selector": ".topic-preview > li > a[href^=\"http\"]:not([href*=\".bilibili.\"])",
+        "type": "hide",
+        "domains": ["bilibili.com"],
+        "description": "隐藏话题预览外链"
+      },
+      {
+        "selector": ".video-page-game-card-small",
+        "type": "hide",
+        "domains": ["bilibili.com"],
+        "description": "隐藏小游戏卡片"
+      },
+      {
+        "selector": "a[data-target-url*=\".taobao.com\"]",
+        "type": "hide",
+        "domains": ["bilibili.com"],
+        "description": "隐藏淘宝广告链接"
+      },
+      {
+        "selector": "a[href$=\"_suning.html\"]",
+        "type": "hide",
+        "domains": ["bilibili.com"],
+        "description": "隐藏苏宁广告链接"
+      },
+      {
+        "selector": "a[href*=\".admaster.\"]",
+        "type": "hide",
+        "domains": ["163.com", "bilibili.com", "longzhu.com"],
+        "description": "隐藏AdMaster追踪链接"
+      },
+      {
+        "selector": "a[href*=\".doubleclick.\"]",
+        "type": "hide",
+        "domains": ["bilibili.com"],
+        "description": "隐藏DoubleClick追踪链接"
+      },
+      {
+        "selector": "a[href*=\"cm.bilibili.com\"][data-target-url*=\"gaoneng.bilibili.com\"]",
+        "type": "hide",
+        "domains": ["bilibili.com"],
+        "description": "隐藏高能广告链接"
+      },
+      {
+        "selector": "a[href*=\"cm.bilibili.com\"][data-target-url*=\"gaoneng.bilibili.com\"] + .bili-video-card__info",
+        "type": "hide",
+        "domains": ["bilibili.com"],
+        "description": "隐藏高能广告信息"
+      },
+      {
+        "selector": "a[href*=\"cm.bilibili.com\"][data-target-url]:not([data-target-url*=\".bilibili.com/\"])",
+        "type": "hide",
+        "domains": ["bilibili.com"],
+        "description": "隐藏非B站外链广告"
+      },
+      {
+        "selector": "a[href*=\"cm.bilibili.com\"][data-target-url]:not([data-target-url*=\".bilibili.com/\"]) + .bili-video-card__info",
+        "type": "hide",
+        "domains": ["bilibili.com"],
+        "description": "隐藏非B站外链广告信息"
+      },
+      {
+        "selector": ".eva-extension-body > .bili-video-card",
+        "type": "conditionalHide",
+        "condition": ".bili-video-card__info--ad",
+        "domains": ["bilibili.com"],
+        "description": "隐藏包含广告信息的视频卡片"
+      },
+      {
+        "selector": ".video-card-common",
+        "type": "conditionalHide",
+        "condition": ".card-pic>a[href*=\"cm.bilibili.com\"][data-target-url]",
+        "domains": ["bilibili.com"],
+        "description": "隐藏包含广告链接的视频卡片"
+      },
+      {
+        "selector": ".video-page-special-card-small",
+        "type": "conditionalHide",
+        "condition": ".card-box>.info>a[href^=\"http\"]:not([href*=\".bilibili.com/\"])",
+        "domains": ["bilibili.com"],
+        "description": "隐藏包含外链的小卡片"
+      },
+      {
+        "selector": "div[style*=\"height:\"][data-loc-id]",
+        "type": "hide",
+        "domains": ["bilibili.com"],
+        "description": "隐藏带定位ID的div广告"
+      },
+      {
+        "selector": "span[style*=\"height:\"][data-loc-id]",
+        "type": "hide",
+        "domains": ["bilibili.com"],
+        "description": "隐藏带定位ID的span广告"
+      }
+    ],
+    "urlFilters": [
+      {
+        "pattern": ".taobao.com",
+        "type": "block",
+        "domains": ["bilibili.com"],
+        "description": "拦截淘宝域名"
+      },
+      {
+        "pattern": "_suning.html",
+        "type": "block",
+        "domains": ["bilibili.com"],
+        "description": "拦截苏宁广告页面"
+      },
+      {
+        "pattern": ".admaster.",
+        "type": "block",
+        "domains": ["163.com", "bilibili.com", "longzhu.com"],
+        "description": "拦截AdMaster追踪"
+      },
+      {
+        "pattern": ".doubleclick.",
+        "type": "block",
+        "domains": ["bilibili.com"],
+        "description": "拦截DoubleClick追踪"
+      },
+      {
+        "pattern": "cm.bilibili.com",
+        "type": "block",
+        "domains": ["bilibili.com"],
+        "description": "拦截B站广告系统"
+      }
+    ],
+    "blockedDomains": [
+      {
+        "domain": "cm.bilibili.com",
+        "description": "B站广告系统域名"
+      },
+      {
+        "domain": "doubleclick.net",
+        "description": "Google广告域名"
+      },
+      {
+        "domain": "admaster.com.cn",
+        "description": "AdMaster追踪域名"
+      }
+    ]
+  }
+}

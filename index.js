@@ -80,83 +80,47 @@ app.on('activate', () => {
 // 加载过滤规则
 function loadFilterRules() {
   try {
-    const rulesPath = path.join(__dirname, 'list.txt');
+    const rulesPath = path.join(__dirname, 'rules.json');
     const content = fs.readFileSync(rulesPath, 'utf-8');
-    const lines = content.split('\n').filter(line => line.trim() && !line.startsWith('!'));
+    const rules = JSON.parse(content);
     
-    const cssRules = [];
-    const urlFilters = [];
-    const blockedDomains = [];
+    console.log(`成功加载规则文件 v${rules.version}`);
+    console.log(`CSS选择器: ${rules.rules.cssSelectors.length} 条`);
+    console.log(`URL过滤: ${rules.rules.urlFilters.length} 条`);
+    console.log(`域名拦截: ${rules.rules.blockedDomains.length} 个`);
     
-    lines.forEach(line => {
-      line = line.trim();
-      
-      // 处理元素隐藏规则 (##)
-      if (line.includes('##') && !line.includes('#?#')) {
-        const parts = line.split('##');
-        const selector = parts[1];
-        if (selector) {
-          cssRules.push(selector);
-        }
-      }
-      
-      // 处理扩展CSS规则 (#?#)
-      else if (line.includes('#?#')) {
-        const parts = line.split('#?#');
-        const selector = parts[1];
-        if (selector && selector.includes(':has(')) {
-          // 简化的:has选择器处理
-          const baseSelector = selector.split(':has(')[0];
-          cssRules.push(baseSelector);
-        }
-      }
-      
-      // 处理URL过滤规则
-      else if (line.includes('##a[')) {
-        const hrefMatch = line.match(/href\*?="([^"]+)"|href\^="([^"]+)"|href\$="([^"]+)"/);
-        if (hrefMatch) {
-          const filter = hrefMatch[1] || hrefMatch[2] || hrefMatch[3];
-          if (filter) {
-            urlFilters.push(filter);
-          }
-        }
-      }
-      
-      // 处理域名过滤
-      else if (line.startsWith('||')) {
-        const domain = line.replace('||', '').split('^')[0].split('$')[0];
-        blockedDomains.push(domain);
-      }
-    });
-    
-    console.log(`加载了 ${cssRules.length} 条CSS规则, ${urlFilters.length} 条URL规则, ${blockedDomains.length} 个域名`);
-    return { cssRules, urlFilters, blockedDomains };
+    return rules.rules;
   } catch (error) {
     console.error('加载过滤规则失败:', error);
-    return { cssRules: [], urlFilters: [], blockedDomains: [] };
+    return { cssSelectors: [], urlFilters: [], blockedDomains: [] };
   }
 }
 
 // 设置webRequest拦截器
 function setupWebRequestFilter(session, rules) {
-  if (!rules.urlFilters.length && !rules.blockedDomains.length) return;
+  if (!rules.urlFilters && !rules.blockedDomains) return;
+  
+  const urlFilters = rules.urlFilters || [];
+  const blockedDomains = rules.blockedDomains || [];
   
   // 拦截广告相关的网络请求
   session.webRequest.onBeforeRequest((details, callback) => {
     const url = details.url;
+    const hostname = new URL(url).hostname;
     
     // 检查域名拦截
-    const shouldBlockDomain = rules.blockedDomains.some(domain => {
-      return url.includes(domain);
+    const shouldBlockDomain = blockedDomains.some(item => {
+      return hostname.includes(item.domain) || url.includes(item.domain);
     });
     
     // 检查URL模式拦截
-    const shouldBlockUrl = rules.urlFilters.some(filter => {
-      if (filter.includes('*')) {
-        const pattern = filter.replace(/\*/g, '.*');
-        return new RegExp(pattern, 'i').test(url);
+    const shouldBlockUrl = urlFilters.some(filter => {
+      const pattern = filter.pattern;
+      if (pattern.includes('*')) {
+        const regexPattern = pattern.replace(/\*/g, '.*');
+        return new RegExp(regexPattern, 'i').test(url);
       }
-      return url.toLowerCase().includes(filter.toLowerCase());
+      return url.toLowerCase().includes(pattern.toLowerCase());
     });
     
     if (shouldBlockDomain || shouldBlockUrl) {
@@ -170,9 +134,21 @@ function setupWebRequestFilter(session, rules) {
 
 // 注入CSS样式隐藏广告元素
 function setupCSSInjection(window, rules) {
-  if (!rules.cssRules.length) return;
+  const cssSelectors = rules.cssSelectors || [];
+  if (!cssSelectors.length) return;
   
-  const css = rules.cssRules.map(selector => `${selector} { display: none !important; }`).join('\n');
+  // 生成CSS样式
+  const cssRules = [];
+  cssSelectors.forEach(rule => {
+    if (rule.type === 'hide') {
+      cssRules.push(`${rule.selector} { display: none !important; }`);
+    } else if (rule.type === 'conditionalHide' && rule.condition) {
+      // 对于条件隐藏规则，使用更复杂的CSS或JavaScript处理
+      cssRules.push(`${rule.selector}:has(${rule.condition}) { display: none !important; }`);
+    }
+  });
+  
+  const css = cssRules.join('\n');
   
   window.webContents.on('dom-ready', () => {
     window.webContents.insertCSS(css);
@@ -181,8 +157,43 @@ function setupCSSInjection(window, rules) {
   
   // 动态监听DOM变化，持续隐藏新出现的广告
   window.webContents.on('dom-ready', () => {
-    window.webContents.executeJavaScript(`
-      const observer = new MutationObserver(() => {
+    const jsCode = `
+      (function() {
+        const cssRules = ${JSON.stringify(cssSelectors.filter(r => r.type === 'conditionalHide'))};
+        
+        function applyConditionalRules() {
+          cssRules.forEach(rule => {
+            if (rule.condition) {
+              try {
+                const elements = document.querySelectorAll(rule.selector);
+                elements.forEach(el => {
+                  if (el.querySelector(rule.condition)) {
+                    el.style.display = 'none';
+                  }
+                });
+              } catch (e) {
+                console.warn('应用条件规则失败:', rule.selector, e);
+              }
+            }
+          });
+        }
+        
+        // 立即应用一次
+        applyConditionalRules();
+        
+        // 设置观察者
+        const observer = new MutationObserver(() => {
+          applyConditionalRules();
+        });
+        
+        if (document.body) {
+          observer.observe(document.body, {
+            childList: true,
+            subtree: true
+          });
+        }
+        
+        // 添加样式
         const style = document.createElement('style');
         style.textContent = \`${css}\`;
         style.id = 'ad-blocker-style';
@@ -193,12 +204,9 @@ function setupCSSInjection(window, rules) {
         }
         
         document.head.appendChild(style);
-      });
-      
-      observer.observe(document.body, {
-        childList: true,
-        subtree: true
-      });
-    `);
+      })();
+    `;
+    
+    window.webContents.executeJavaScript(jsCode);
   });
 }
