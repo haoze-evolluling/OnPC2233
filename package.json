@@ -1,6 +1,6 @@
 {
   "name": "bilibili",
-  "version": "1.0.106",
+  "version": "3.0.1",
   "description": "a video player",
   "main": "index.js",
   "scripts": {
@@ -40,11 +40,11 @@
         }
       ],
       "icon": "icon.ico",
-      "requestedExecutionLevel": "requireAdministrator"
+      "requestedExecutionLevel": "asInvoker"
     },
     "nsis": {
       "oneClick": false,
-      "perMachine": true,
+      "perMachine": false,
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
       "runAfterFinish": true,
